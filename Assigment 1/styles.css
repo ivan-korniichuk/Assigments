@@ -1,0 +1,58 @@
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.isDisabled{
+    color: grey;
+    display: inline-block;  /* For IE11/ MS Edge bug */
+    pointer-events: none;
+    /* text-decoration: none; */
+  }
+
+.container{
+    min-width: 470px;
+    max-width: 520px;
+    /* width: 50%; */
+}
+/* .date-presets{
+    display: flex;
+} */
+
+.end-date-container{
+    display: flex;
+    align-items: center;
+    /* vertical-align: middle;
+    display: inline-block;
+    vertical-align: middle; */
+    
+}
+
+.previous-data{
+    margin: 0 5px;
+}
+
+.previous-request{
+    /* word-wrap: break-word; */
+    /* max-width: 500px; */
+    display: flex;
+    justify-content: space-between;
+    border-style: groove;
+    margin: 5px 0;
+    padding: 10px;
+}
+
+.date-input{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.button{
+    margin: 10px 0;
+}
+
+/* .additional-properties{
+    display: flex;
+    justify-content: space-between;
+} */
