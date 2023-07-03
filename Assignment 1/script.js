@@ -153,7 +153,7 @@ function getWeekendDays(startDate, endDate){
     return result;
 }
 
-function createSavedCounter(startDate, endDate, result){
+function createSavedCounter(startDate, endDate, result) {
     previousRequests.push({
         startDate: startDate,
         endDate: endDate,
