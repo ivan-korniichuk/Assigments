@@ -1,0 +1,69 @@
+<<<<<<< HEAD
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Counter</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Date Counter</h1>
+        <form class="date-counter-form">
+            <div class="date-input">
+                <div class="start-date-container">
+                    <label for="start-date">Start date</label>
+                    <input type="date" id="start-date" required>
+                </div>
+                <div class="end-date-container">
+                    <div class="date-presets">
+                        <a class="preset isDisabled" id="add-week" href="#" data-preset="week">Add a week</a><br>
+                        <a class="preset isDisabled" id="add-month" href="#" data-preset="month">Add a month</a>
+                    </div>
+                    <div>
+                        <label for="end-date">End date</label>
+                        <input type="date" id="end-date" min="2025-05-05"required disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="additional-properties">
+                <div class="included-dates">
+                    <fieldset>
+                        <legend>Include only:</legend>
+                        <input type="radio" id="all-days" name="included-days" value="all days" checked>
+                        <label for="all-days">All days</label>
+                        <input type="radio" id="working-days" name="included-days" value="working days">
+                        <label for="working-days">Working days</label>
+                        <input type="radio" id="weekends" name="included-days" value="weekend days">
+                        <label for="weekends">Weekends</label>
+                    </fieldset>
+                </div>
+                <div class="time-units">
+                    <fieldset>
+                        <legend>Measure time in:</legend>
+                        <input type="radio" name="time-units" id="time-in-days" value="days" checked>
+                        <label for="time-in-days">Days</label>
+                        <input type="radio" name="time-units" id="time-in-hours" value="hours">
+                        <label for="time-in-hours">Hours</label>
+                        <input type="radio" name="time-units" id="time-in-minutes" value="minutes">
+                        <label for="time-in-minutes">Minutes</label>
+                        <input type="radio" name="time-units" id="time-in-secons" value="seconds">
+                        <label for="time-in-secons">Seconds</label>
+                    </fieldset>
+                </div>
+            </div>
+            <input class="button" type="submit" id="submit">
+        </form>
+        <h2>Previous Requests:</h2>
+        <div class="previous-requests">
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    
+    </div>
+</body>
+</html>
+>>>>>>> parent of e78eb96 (Assignment 1)
