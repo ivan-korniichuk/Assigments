@@ -6,6 +6,7 @@ body{
 }
 .isDisabled{
     color: grey;
+    /* display: inline-block; */
     pointer-events: none;
   }
 
