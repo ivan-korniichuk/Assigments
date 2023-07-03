@@ -4,30 +4,6 @@ JSON.parse(localStorage.getItem("previousRequests")) :
 console.log(previousRequests);
 displayPreviousRequests();
 
-//localStorage.setItem("previousRequests", JSON.stringify([])); //to clear
-
-// function initCheckboxesValidation(){
-//     const checkboxes = document.querySelectorAll(".time-units > fieldset > input[type=checkbox]");
-//     for(checkbox of checkboxes){
-//         checkbox.addEventListener("click", checkValidity);
-//     }
-
-//     function isChecked(){
-//         for (checkbox of checkboxes){
-//             if (checkbox.checked) return true;
-//         }
-
-//         return false;
-//     }
-
-//     function checkValidity() {
-//         const errorMessage = !isChecked() ? 'At least one checkbox must be selected.' : '';
-//         checkboxes[0].setCustomValidity(errorMessage);
-//     }
-// };
-
-// initCheckboxesValidation();
-
 document.querySelector("#start-date").addEventListener("input", () => {
     if(validDate(document.querySelector("#start-date").value)){
         document.querySelector("#end-date").disabled = false;
@@ -51,7 +27,12 @@ for(let preset of document.querySelectorAll("a.preset")){
 document.querySelector(".date-counter-form").addEventListener("submit", (event) => {
     const startDate = document.querySelector("#start-date").value;
     const endDate = document.querySelector("#end-date").value;
-    const result = countDuration(startDate, endDate, getRadioValue(document.getElementsByName("time-units")));
+    const result = getDuration(
+        startDate,
+        endDate,
+        getRadioValue(document.getElementsByName("time-units")),
+        getRadioValue(document.getElementsByName("included-days"))
+        );
 
     event.preventDefault();
 
@@ -74,57 +55,102 @@ function dateFromPresset(date, preset = "week"){
     return newDate.getFullYear() + "-" + String(newDate.getMonth() + 1).padStart(2, '0') + "-" + String(newDate.getDate()).padStart(2, '0');
 }
 
-function countDuration(startDate, endDate, unit = "days"/*units = ["days", "hours", "minutes", "seconds"]*/) {
-    let duration = (Date.parse(endDate) - Date.parse(startDate))/1000;
-    //let durationInUnits = "";
-    let time = 0;
-    //const defaultUnits = ["days", "hours", "minutes", "seconds"];
-
-    // for(let defaultUnit of defaultUnits){
-    //     for(let unit of units){
-    //         if(unit === defaultUnit){
-    //             switch (unit) {
-    //                 case "days":
-    //                     time = duration/3600/24;
-    //                     duration -= time*3600*24;
-    //                     break;
-    //                 case "hours":
-    //                     time = duration/3600;
-    //                     duration -= time*3600;
-    //                     break;
-    //                 case "minutes":
-    //                     time = duration/60;
-    //                     duration -= time*60;
-    //                     break;
-    //                 case "seconds":
-    //                     time = duration;
-    //                     duration -= time*3600*24;
-    //                     break;
-    //             }
-    //             durationInUnits += time + " " + unit + " ";
-    //         }
-    //     }
-    // }
-
-    switch (unit) {
-        case "days":
-            time = duration/3600/24;
-            duration -= time*3600*24;
+function getDuration(startDate, endDate, units = "days", type = "all days"){
+    const duration = convertTime((Date.parse(endDate) - Date.parse(startDate)), "milliseconds", units)
+    let result = "";
+    
+    switch (type) {
+        case "all days":
+            result += duration;
             break;
-        case "hours":
-            time = duration/3600;
-            duration -= time*3600;
+        case "working days":
+            result += duration - convertTime(getWeekendDays(startDate, endDate), "days", units) + " working";
             break;
-        case "minutes":
-            time = duration/60;
-            duration -= time*60;
-            break;
-        case "seconds":
-            time = duration;
-            duration -= time*3600*24;
+        case "weekend days":
+            result += convertTime(getWeekendDays(startDate, endDate), "days", units) + " weekend"
             break;
     }
-    return time + " " + unit;
+    result += " " + units;
+
+    return result;
+}
+
+function convertTime(time, unit = "days", newUnit = "days") {
+    switch (unit) {
+        case "days":
+            time = time*1000*3600*24;
+            break;
+        case "hours":
+            time = time*1000*3600
+            break;
+        case "minutes":
+            time = time*1000*60;
+            break;
+        case "seconds":
+            time = time*1000;
+            break;
+        case "milliseconds":
+            time = time;
+            break;
+    }
+
+    switch (newUnit) {
+        case "days":
+            time = time/1000/3600/24;
+            break;
+        case "hours":
+            time = time/1000/3600
+            break;
+        case "minutes":
+            time = time/1000/60;
+            break;
+        case "seconds":
+            time = time/1000;
+            break;
+        case "milliseconds":
+            time = time;
+            break;
+    }
+
+    return time;
+
+}
+
+function getWeekendDays(startDate, endDate){
+    let days = convertTime((Date.parse(endDate) - Date.parse(startDate)), "milliseconds", "days")
+    let result = 0;
+    startDate = new Date(Date.parse(startDate)).getDay();
+    endDate = new Date(Date.parse(endDate)).getDay();
+
+    if (days === 0) {
+        console.log("days === 0");
+        return 0;
+    }
+    else if (days < 7) {
+        if (startDate < endDate) {
+            if (startDate === 0) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } 
+    }
+
+    if (startDate === 0) {
+        result += 1;
+    }
+
+    if (endDate === 0) {
+        result += 1;
+    } else {
+        result += 2;
+    }
+
+    days -= 7 - startDate + endDate;
+
+    result += days / 7 * 2;
+
+    return result;
 }
 
 function createSavedCounter(startDate, endDate, result){
