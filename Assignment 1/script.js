@@ -206,9 +206,9 @@ function renderPreviousRequests(){
     for(let previousRequest of previousRequests){
         items += `
         <div class="previous-request">
-            <span class="previous-data">Start date: ${previousRequest.startDate}</span>
-            <span class="previous-data">End date: ${previousRequest.endDate}</span>
-            <span class="previous-data">Result: ${previousRequest.result}</span>
+            <div class="previous-data">Start date: ${previousRequest.startDate}</div>
+            <div class="previous-data">End date: ${previousRequest.endDate}</div>
+            <div class="previous-data">Result: ${previousRequest.result}</div>
         </div>
         `
     }
