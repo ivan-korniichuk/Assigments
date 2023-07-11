@@ -199,7 +199,7 @@ function convertDate(date) {
     date.getFullYear();
 }
 
-function renderPreviousRequests(){
+function renderPreviousRequests() {
     const previousRequests = getRequestsFromLocalStorage();
     let items = "";
 
