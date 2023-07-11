@@ -31,8 +31,8 @@ function addNewRequestToLocalStorage(startDate, endDate, result) {
     let previousRequests = getRequestsFromLocalStorage();
 
     previousRequests.push({
-        startDate: startDate,
-        endDate: endDate,
+        startDate: convertDate(startDate),
+        endDate: convertDate(endDate),
         result: result,
     });
 
@@ -189,6 +189,14 @@ function getRadioValue(elements){
         }
     }
     return false;
+}
+
+function convertDate(date) {
+    date = new Date(Date.parse(date));
+
+    return String(date.getDate()).padStart(2, '0') + "/" +
+    String(date.getMonth() + 1).padStart(2, '0') + "/" +
+    date.getFullYear();
 }
 
 function renderPreviousRequests(){
