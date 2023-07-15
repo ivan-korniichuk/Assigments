@@ -5,11 +5,6 @@ body{
     background-color: rgb(83, 159, 159);
 }
 
-.isDisabled{
-    color: grey;
-    pointer-events: none;
-}
-
 .container{
     padding: 15px;
     background-color: white;
@@ -17,8 +12,43 @@ body{
     box-shadow: 0px 0px 10px 2px rgba(0,0,0,.8);
 }
 
-.button{
-    margin: 10px 0;
+.submit {
+    margin: 10px 3px;
+    background-color: rgb(91, 193, 94);
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.submit:hover {
+    background-color: rgb(91, 165, 93);
+}
+
+.submit:active {
+    background-color: rgb(62, 135, 64);
+}
+
+.preset {
+    color: rgb(91, 80, 247);
+    background: none;
+	border: none;
+	padding: 0;
+	font: inherit;
+}
+
+.preset:hover { 
+    color: rgb(12, 12, 185);
+}
+
+.preset:active {
+    color: rgb(0, 0, 0);
+}
+
+.isDisabled{
+    color: grey;
+    pointer-events: none;
 }
 
 @media screen and (min-width: 530px) {

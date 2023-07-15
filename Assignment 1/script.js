@@ -3,7 +3,6 @@ const startDateInput = document.getElementById("start-date");
 const addWeekPreset = document.getElementById("add-week");
 const addMonthPreset = document.getElementById("add-month");
 const form = document.querySelector(".date-counter-form");
-const presets = document.querySelectorAll("a.preset");
 const timeRadios = document.getElementsByName("time-units");
 const daysRadios = document.getElementsByName("included-days");
 const previousRequestElements = document.querySelector(".previous-requests")
@@ -13,11 +12,15 @@ renderPreviousRequests();
 startDateInput.addEventListener("input", enableEndInputOnValid);
 form.addEventListener("submit", trySubmitForm);
 
-for(let preset of presets) {
-    preset.addEventListener("click", () => {
-        endDateInput.value = dateFromPresset(startDateInput.value, preset.getAttribute("data-preset"));
-    });
-}
+addWeekPreset.addEventListener("click", (event) => {
+    event.preventDefault();
+    endDateInput.value = dateFromPresset(startDateInput.value, addWeekPreset.getAttribute("data-preset"));
+});
+
+addMonthPreset.addEventListener("click", (event) => {
+    event.preventDefault();
+    endDateInput.value = dateFromPresset(startDateInput.value, addMonthPreset.getAttribute("data-preset"));
+});
 
 function setRequestsToLocalStorage(previousRequests) {
     localStorage.setItem("previousRequests", JSON.stringify(previousRequests));
@@ -89,81 +92,60 @@ function dateFromPresset(date, preset = "week"){
     return newDate.getFullYear() + "-" + String(newDate.getMonth() + 1).padStart(2, '0') + "-" + String(newDate.getDate()).padStart(2, '0');
 }
 
+function convertDate(date) {
+    date = new Date(Date.parse(date));
+
+    return String(date.getDate()).padStart(2, '0') + "/" +
+    String(date.getMonth() + 1).padStart(2, '0') + "/" +
+    date.getFullYear();
+}
+
 function getDuration(startDate, endDate, units = "days", type = "all days"){
-    const duration = convertTime((Date.parse(endDate) - Date.parse(startDate)), "milliseconds", units)
-    let result = "";
+    function convertDaysInto(time) {
+        switch (units) {
+            case "days":
+                time = time;
+                break;
+            case "hours":
+                time = time*24;
+                break;
+            case "minutes":
+                time = time*60*24;
+                break;
+            case "seconds":
+                time = time*3600*24;
+                break;
+        }
+        return time;
+    }
+
+    const durationInDays = getDurationInDays(endDate, startDate);
+    let result;
     
     switch (type) {
         case "all days":
-            result += duration;
+            result = convertDaysInto(durationInDays);
             break;
         case "working days":
-            result += duration - convertTime(getWeekendDays(startDate, endDate), "days", units) + " working";
+            result = convertDaysInto(durationInDays - getWeekendDays(startDate, endDate)) + " working";
             break;
         case "weekend days":
-            result += convertTime(getWeekendDays(startDate, endDate), "days", units) + " weekend"
+            result = convertDaysInto(getWeekendDays(startDate, endDate)) + " weekend"
             break;
     }
     result += " " + units;
     return result;
 }
 
-function convertTime(time, unit = "days", newUnit = "days") {
-    switch (unit) {
-        case "days":
-            time = time*1000*3600*24;
-            break;
-        case "hours":
-            time = time*1000*3600
-            break;
-        case "minutes":
-            time = time*1000*60;
-            break;
-        case "seconds":
-            time = time*1000;
-            break;
-        case "milliseconds":
-            time = time;
-            break;
-    }
-    switch (newUnit) {
-        case "days":
-            time = time/1000/3600/24;
-            break;
-        case "hours":
-            time = time/1000/3600
-            break;
-        case "minutes":
-            time = time/1000/60;
-            break;
-        case "seconds":
-            time = time/1000;
-            break;
-        case "milliseconds":
-            time = time;
-            break;
-    }
-    return time;
+function getDurationInDays(endDate, startDate) {
+    return (Date.parse(endDate) - Date.parse(startDate))/1000/3600/24;
 }
 
 function getWeekendDays(startDate, endDate){
-    let days = convertTime((Date.parse(endDate) - Date.parse(startDate)), "milliseconds", "days")
+    let days = getDurationInDays(endDate, startDate);
     let result = 0;
     startDate = new Date(Date.parse(startDate)).getDay();
     endDate = new Date(Date.parse(endDate)).getDay();
-
-    if (days === 0) {
-        console.log("days === 0");
-        return 0;
-    } else if (days < 7) {
-        if (startDate < endDate) {
-            if (startDate === 0) {
-                return 1;
-            } else {
-                return 0;
-            }
-        } 
-    }
 
     if (startDate === 0) result += 1;
 
@@ -175,6 +157,7 @@ function getWeekendDays(startDate, endDate){
 
     days -= 7 - startDate + endDate;
     result += days / 7 * 2;
+
     return result;
 }
 
@@ -189,14 +172,6 @@ function getRadioValue(elements){
         }
     }
     return false;
-}
-
-function convertDate(date) {
-    date = new Date(Date.parse(date));
-
-    return String(date.getDate()).padStart(2, '0') + "/" +
-    String(date.getMonth() + 1).padStart(2, '0') + "/" +
-    date.getFullYear();
 }
 
 function renderPreviousRequests() {
