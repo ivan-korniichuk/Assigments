@@ -93,19 +93,16 @@ function dateFromPresset(date, preset = "week"){
 }
 
 function convertDate(date) {
-    date = new Date(Date.parse(date));
+    const convertedDate = new Date(Date.parse(date));
 
-    return String(date.getDate()).padStart(2, '0') + "/" +
-    String(date.getMonth() + 1).padStart(2, '0') + "/" +
-    date.getFullYear();
+    return String(convertedDate.getDate()).padStart(2, '0') + "/" +
+    String(convertedDate.getMonth() + 1).padStart(2, '0') + "/" +
+    convertedDate.getFullYear();
 }
 
 function getDuration(startDate, endDate, units = "days", type = "all days"){
     function convertDaysInto(time) {
         switch (units) {
-            case "days":
-                time = time;
-                break;
             case "hours":
                 time = time*24;
                 break;
@@ -147,13 +144,8 @@ function getWeekendDays(startDate, endDate){
     startDate = new Date(Date.parse(startDate)).getDay();
     endDate = new Date(Date.parse(endDate)).getDay();
 
-    if (startDate === 0) result += 1;
-
-    if (endDate === 0) {
-        result += 1;
-    } else {
-        result += 2;
-    }
+    result += startDate === 0 ? 1 : 0;
+    result += endDate === 0 ? 1 : 2;
 
     days -= 7 - startDate + endDate;
     result += days / 7 * 2;
