@@ -1,3 +1,5 @@
+"use strict";
+
 const endDateInput = document.getElementById("end-date");
 const startDateInput = document.getElementById("start-date");
 const addWeekPreset = document.getElementById("add-week");
